@@ -109,11 +109,12 @@ void render_tile(uint8_t i, uint8_t j, uint8_t y) {
 	if (p)
 		puts(BORDER_COLOR BORDER_RIGHT);
 	else
-		puts(" ");
+		putc(' ');
 	puts(RESET);
 	fflush(stdout);
 }
 void render_row(uint8_t i, uint8_t y) {
+	putc(' ');
 	for (uint8_t j = 0; j < SIZE_J; ++j) {
 		render_tile(i, j, y);
 	}
@@ -172,18 +173,26 @@ bool flag(struct pos s) {
 	TILE.flag = (TILE.flag + 1) % 3;
 	return 1;
 }
+void shuffle(struct pos *a, size_t n) {
+	if (n > 1) {
+		for (size_t i = 0; i < n - 1; ++i) {
+			size_t j = (rand_() / (RAND_MAX / (n - i) + 1)) + i;
+			struct pos t = a[j];
+			a[j] = a[i];
+			a[i] = t;
+		}
+	}
+}
 bool step(struct pos s) {
-	TILE.flag = 0;
 	if (TILE.step || TILE.flag) return 0;
-	TILE.step = 1;
+	TILE.flag = TILE.step = 1;
 	if (TILE.mine) game_over = 1;
 	if (get_neighbours(s.i, s.j, NULL, 0) > 0) return 0;
 	struct pos *a;
 	uint8_t n = get_neighbours(s.i, s.j, &a, 1);
+	shuffle(a, n);
 	for (uint8_t i = 0; i < n; ++i) {
-		bool z = step(a[i]);
-		render_board();
-		if (z); //usleep(100000);
+		if (step(a[i])) render_board();
 	}
 	return 1;
 }
@@ -239,13 +248,13 @@ int main() {
 			if (b < 0 || b == 4 || b == 26 || b == 17) end(1); else
 			if (b == 3) end(0); else
 			if (b == 'w' || b == 'A') {
-				if (sel.i > 0)          { --sel.i; } break; } else
+				if (sel.i > 0)          { --sel.i; break; }} else
 			if (b == 's' || b == 'B') {
-				if (sel.i < SIZE_I - 1) { ++sel.i; } break; } else
+				if (sel.i < SIZE_I - 1) { ++sel.i; break; }} else
 			if (b == 'd' || b == 'C') {
-				if (sel.j < SIZE_J - 1) { ++sel.j; } break; } else
+				if (sel.j < SIZE_J - 1) { ++sel.j; break; }} else
 			if (b == 'a' || b == 'D') {
-				if (sel.j > 0)          { --sel.j; } break; } else
+				if (sel.j > 0)          { --sel.j; break; }} else
 			if (b == 'h' || b == 'H') { 
 				if (!started) {
 					set_all_random(sel.i, sel.j);
