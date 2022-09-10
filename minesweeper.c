@@ -64,6 +64,7 @@ bool won = 0;
 void render_tile(uint8_t i, uint8_t j, uint8_t y) {
 	uint8_t n = get_neighbours(i, j, NULL, 0);
 	bool p = sel.i == i && sel.j == j;
+	putc(' ');
 	if (y == 0) {
 		puts(p ? RESET BORDER_COLOR BORDER_TOP    RESET : RESET "\x1b[3C" RESET);
 		return;
@@ -114,7 +115,6 @@ void render_tile(uint8_t i, uint8_t j, uint8_t y) {
 	fflush(stdout);
 }
 void render_row(uint8_t i, uint8_t y) {
-	putc(' ');
 	for (uint8_t j = 0; j < SIZE_J; ++j) {
 		render_tile(i, j, y);
 	}
