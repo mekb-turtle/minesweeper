@@ -127,6 +127,8 @@ void render_board() {
 	turn = 1;
 	new_lines = 0;
 	new_line();
+	puts("\x1b[38;5;11mF to flag, \x1b[38;5;9mH to step, \x1b[38;5;12marrow keys or WASD to move\x1b[0m");
+	new_line();
 	new_line();
 	puts("\x1b[2K");
 	for (uint8_t i = 0; i < SIZE_I; ++i) {
