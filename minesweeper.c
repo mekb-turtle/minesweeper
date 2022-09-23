@@ -50,8 +50,6 @@ uint8_t get_neighbours(uint8_t i_, uint8_t j_, struct pos** out, bool invert) {
 	uint8_t c = 0;
 	for (uint8_t i = i_ == 0 ? 0 : i_ - 1; i_ >= SIZE_I - 1 ? i < SIZE_I : i <= i_ + 1; ++i)
 	for (uint8_t j = j_ == 0 ? 0 : j_ - 1; j_ >= SIZE_J - 1 ? j < SIZE_J : j <= j_ + 1; ++j) {
-		if (i>=SIZE_I||j>=SIZE_J)
-		printf("%i %i\n",i,j);
 		if (board[i][j].mine != invert) {
 			if (out) (*out)[c] = (struct pos) { .i = i, .j = j };
 			++c;
